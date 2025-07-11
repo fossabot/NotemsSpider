@@ -25,8 +25,8 @@ def process_codes(codes, stage, length=0, start_index=0):
             progress['brute_index'] = idx
         save_progress(progress)
 
-        if failed_code:
-            retry.append(failed_code)
+        if not success or failed_code:
+            retry.append(code)
 
         time.sleep(random.uniform(*DELAY_RANGE))
 
@@ -38,18 +38,16 @@ def run():
     progress = load_progress()
 
     if progress['stage'] == 'dict':
-        dict_codes = load_dictionary()
-        retry = process_codes(dict_codes[progress['dict_index']:], 'dict', start_index=progress['dict_index'])
+        retry = process_codes(load_dictionary()[progress['dict_index']:], 'dict', start_index=progress['dict_index'])
         while retry:
             retry = process_codes(retry, 'dict')
         progress.update({'stage': 'brute', 'brute_len': MIN_LEN, 'brute_index': 0})
         save_progress(progress)
 
     for length in range(progress['brute_len'], MAX_LEN + 1):
-        total = total_combinations(length)
         start = progress['brute_index'] if length == progress['brute_len'] else 0
-        codes = (brute_code_at(i, length) for i in range(start, total))
-        retry = process_codes(codes, 'brute', length, start)
+        retry = process_codes((brute_code_at(i, length) for i in range(start, total_combinations(length))), 'brute',
+                              length, start)
 
         while retry:
             retry = process_codes(retry, 'brute', length)
