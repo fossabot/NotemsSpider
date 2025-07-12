@@ -15,14 +15,6 @@ logging.basicConfig(
 )
 
 interrupted = False
-worker = None
-
-
-def worker_main():
-    try:
-        run()
-    except KeyboardInterrupt:
-        sys.exit(0)
 
 
 def handle_sigint(signum, frame):
@@ -34,6 +26,13 @@ def handle_sigint(signum, frame):
         print("\nReceived interrupt, shutting down...")
     else:
         os._exit(1)
+
+
+def worker_main():
+    try:
+        run()
+    except KeyboardInterrupt:
+        sys.exit(0)
 
 
 if __name__ == "__main__":
