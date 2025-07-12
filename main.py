@@ -18,7 +18,7 @@ interrupted = False
 
 
 def handle_sigint(signum, frame):
-    global interrupted, worker
+    global interrupted
     if not interrupted:
         interrupted = True
         if worker and worker.is_alive():
