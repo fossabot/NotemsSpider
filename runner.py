@@ -31,6 +31,7 @@ def process_code(code, stage, length=0, index=0, retry=False):
 
     time.sleep(random.uniform(*DELAY_RANGE))
 
+
 def run():
     init_progress()
     init_retry()

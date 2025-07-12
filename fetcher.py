@@ -9,11 +9,13 @@ from db_model import Result
 
 logger = logging.getLogger(__name__)
 
+
 def save_result(code, content):
     with get_session() as session:
         if not session.query(Result).filter_by(code=code).first():
             session.add(Result(code=code, content=content.strip()))
             session.commit()
+
 
 def fetch_and_extract(code):
     url = BASE_URL + code
