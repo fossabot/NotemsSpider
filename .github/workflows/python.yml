@@ -23,6 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install -r requirements.txt
           pip install flake8 black mypy
 
       - name: Run black (format and fix)
