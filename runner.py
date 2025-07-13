@@ -23,9 +23,9 @@ def process_code(code, stage, length=0, index=0, retry=False):
         progress["brute_index"] = index + 1
     save_progress(progress)
 
-    if (not success or failed_code) and (not retry):
+    if not success or failed_code:
         save_retry(code)
-    if (success and not failed_code) and retry:
+    elif retry:
         logger.info(f"delete retry: {code}")
         delete_retry(code)
 

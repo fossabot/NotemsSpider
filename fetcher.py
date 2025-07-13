@@ -3,7 +3,7 @@ import logging
 from curl_cffi import requests as cffi_requests
 from lxml import html
 
-from config import BASE_URL, IMPERSONATE
+from config import BASE_URL, IMPERSONATE, UA
 from db import get_session
 from db_model import Result
 
@@ -23,16 +23,15 @@ def fetch_and_extract(code):
         r = cffi_requests.get(
             url,
             headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115 Safari/537.36"
+                "User-Agent": UA
             },
             impersonate=IMPERSONATE,
             timeout=10,
         )
 
         if r.status_code == 200:
-            tree = html.fromstring(r.text)
             found = False
-            for t in tree.xpath("//textarea"):
+            for t in html.fromstring(r.text).xpath("//textarea"):
                 if t.text and t.text.strip():
                     logger.info(f"Found: {url}")
                     save_result(code, t.text)
@@ -42,6 +41,8 @@ def fetch_and_extract(code):
                 logger.info(f"No content: {url}")
         else:
             logger.warning(f"Status {r.status_code}: {url}")
+            return False, code
+
         return True, None
     except Exception as e:
         logger.error(f"Error fetching {url}: {e}", exc_info=True)
