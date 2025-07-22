@@ -34,6 +34,7 @@ class RetryQueue(Base):
 
     id = Column(Integer, primary_key=True)
     code = Column(String, nullable=False, unique=True)
+    retries = Column(Integer, default=0, nullable=False)
 
     __table_args__ = (
         UniqueConstraint("code", name="_retry_code_uc"),

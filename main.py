@@ -4,8 +4,9 @@ import os
 import signal
 import sys
 
-from db import engine
-from db_model import Base
+from alembic.config import Config
+
+from alembic import command
 from runner import run
 
 logging.basicConfig(
@@ -36,7 +37,9 @@ def worker_main():
 
 
 if __name__ == "__main__":
-    Base.metadata.create_all(engine)
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
+
     signal.signal(signal.SIGINT, handle_sigint)
 
     worker = multiprocessing.Process(target=worker_main)
