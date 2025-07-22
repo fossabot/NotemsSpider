@@ -37,7 +37,3 @@ This script is intended for educational and research purposes only. Use responsi
 If you are the administrator of note.ms and wish this project to be taken down, please open an issue on the repository.
 如果您是 note.ms 的网站管理员并希望删除本项目，请在本仓库提交 Issue。
 ```
-
-## 📄 **License**
-
-Licensed under [GPL 3.0](LICENSE).
